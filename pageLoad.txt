@@ -1,0 +1,110 @@
+/*
+ *  Script Name: Page Load Times
+ *  Description: Determine Page Load Times
+ *  Author: Anil Charan
+ *  Date: 18-12-18
+ */
+
+package com.inmar.testscripts;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
+public class ACT_Application
+{	
+	public static boolean bStatus;
+
+	public static RemoteWebDriver Webdriver = null;
+	public static WebDriver Host_WebDriver = null;
+
+	public static WebDriverWait Webdriverwait = null;
+	public static DesiredCapabilities Capabilities = null;
+
+	static WebDriver Host_Firefox_WebDriver = null;
+	static DesiredCapabilities Host_Firefox_Capabilities = null;
+
+	static WebDriver Host_Chrome_WebDriver = null;
+	static DesiredCapabilities Host_Chrome_Capabilities = null;
+
+	static WebDriver Host_IE_WebDriver = null;
+	static DesiredCapabilities Host_IE_Capabilities = null;
+
+	public static boolean startDriverInHost(Map<String,String>objHostDetails) throws Exception
+	{
+
+		String sHostName = objHostDetails.get("IPAddress"); /*inmar.com*/
+		String sPortNo = objHostDetails.get("PortNumber");
+
+		getWebdriver sCurrentHost = getWebdriver.valueOf(objHostDetails.get("Host").toUpperCase());
+		sCurrentHost.toString();
+
+		String sNodeURL = "";
+
+		try
+		{
+			switch(sCurrentHost)
+			{
+			case HOST_IE:
+				Capabilities = setBrowserType(Host_IE_Capabilities,objHostDetails);
+				if(Capabilities == null) return false;
+
+				sNodeURL = "http://" + sHostName +  ":" + sPortNo + "/wd/hub";
+				Host_IE_WebDriver = new RemoteWebDriver(new URL(sNodeURL),Capabilities);
+				Webdriver = (RemoteWebDriver) Host_IE_WebDriver;
+
+				return true;
+			case HOST_FIREFOX:
+				Capabilities = setBrowserType(Host_Firefox_Capabilities,objHostDetails);
+				if(Capabilities == null) return false;
+
+				sNodeURL = "http://" + sHostName +  ":" + sPortNo + "/wd/hub";
+				Host_Firefox_WebDriver = new RemoteWebDriver(new URL(sNodeURL),Capabilities);
+				Webdriver = (RemoteWebDriver) Host_Firefox_WebDriver;
+
+				return true;
+			case HOST_CHROME:
+				Capabilities = setBrowserType(Host_Chrome_Capabilities,objHostDetails);
+				if(Capabilities == null) return false;
+
+				sNodeURL = "http://" + sHostName +  ":" + sPortNo + "/wd/hub";
+				Host_Chrome_WebDriver = new RemoteWebDriver(new URL(sNodeURL),Capabilities);
+				Webdriver = (RemoteWebDriver) Host_Chrome_WebDriver;
+
+				return true;					
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("Open browser in the host:" + sHostName,e.getMessage() );
+			return false;
+		}
+	}
+	
+	public static boolean launchApplication(RemoteWebDriver Webdriver,String sURL) throws Exception
+	{
+		try
+		{
+			Webdriver.manage().timeouts().pageLoadTimeout(ACT_Constants.IWAITFORPAGETOLOAD,TimeUnit.SECONDS);
+			long start = System.currentTimeMillis();
+			Webdriver.get(sURL);
+			Webdriver.manage().window().maximize();
+			long finish = System.currentTimeMillis();
+			long totalTime = finish - start; 
+			System.out.println("Total Time for page load - "+totalTime); 
+			return true;
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception occured while launching the application in the browser " + Capabilities.getBrowserName() + " " + e.getMessage());
+			return false;
+		}
+	}
+
+}
