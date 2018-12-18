@@ -1,0 +1,43 @@
+/*
+ *  Script Name: Determine Number of Forms
+ *  Description: Determine Number of Forms or Form Wizards
+ *  Author: Anil Charan
+ *  Date: 18-12-18
+ */
+
+package com.inmar.testscripts;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class NumberOfForms
+{	
+	public static void main() throws Exception
+	{
+		
+		Webdriver driver = new FirefoxDriver();
+		driver.get("https://mgsdemo.mgscoder.com/mgscode/regform/index-2.html");
+
+		/*Wait for Form fields in the Form page*/
+		wait = new WebDriverWait(driver, 5);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//form[@id="signUpForm"]")));
+		
+		/*Get all Form fields*/		
+		List<WebElement> xpath = driver.findElements(By.xpath("//form[@id="signUpForm"]"));
+		int xpathCount = xpath.size();
+
+		System.out.println("Number of Forms present in given page : " + xpathCount);
+
+		/*Get all Form fields by second way*/
+		_forms = driver.find_elements_by_xpath('//form[@id="signUpForm"]');
+		
+		System.out.println("Number of Forms present in given page : " +_forms);
+
+		driver.close();
+		driver.quit();
+	}	
+}
