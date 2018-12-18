@@ -1,0 +1,124 @@
+/*
+ *  Script Name: Data Generator Forms
+ *  Description: Data Generator to fill Forms
+ *  Author: Anil Charan
+ *  Date: 18-12-18
+ */
+
+package com.inmar.testscripts;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.firefox.FirefoxProfile;
+
+public class DataGeneratorForms
+{	
+	public static void main() throws Exception
+	{
+		
+	           for (int i=1;i<=3;i++)
+	           {
+	               if (i>3)
+		{
+		      break;
+		}
+	               else
+		{
+		Webdriver driver = new FirefoxDriver();
+		driver.get("https://mgsdemo.mgscoder.com/mgscode/regform/index-2.html");
+
+		/*Wait for Username field in the Form page*/
+		wait = new WebDriverWait(driver, 5);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id="uname"]")));
+		
+		driver.findElement(By.xpath("//input[@id="uname"]")).sendKeys("AutomationUser"+i);
+		
+		driver.findElement(By.xpath("//input[@id="email"]")).sendKeys("automation"+i+"@gmail.com");
+		
+		driver.findElement(By.xpath("//input[@id="pass"]")).sendKeys("Autouser@"+i);
+		
+		driver.findElement(By.xpath("//input[@id="cpass"]")).sendKeys("Autouser@"+i);
+		
+		driver.findElement(By.xpath("//button[@onclick="nextStep2()"]")).click();
+		
+		/*Wait for FirstName field in the Form page*/
+		wait = new WebDriverWait(driver, 5);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id="fname"]")));
+		
+		driver.findElement(By.xpath("//input[@id="fname"]")).sendKeys("AutomationFirstName"+i);
+		
+		driver.findElement(By.xpath("//input[@id="lname"]")).sendKeys("AutomationLastName"+i);
+		
+		Select gender = new Select(driver.findElement(By.id("gender")));
+		gender.selectByVisibleText("Male");
+		
+		driver.findElement(By.xpath("//input[@id="birthdate"]")).sendKeys("07-07-1987");
+
+		driver.findElement(By.xpath("//input[@id="address"]")).sendKeys("Hyderabad");
+
+		driver.findElement(By.xpath("//input[@id="phone"]")).sendKeys("999779991"+i);
+
+		driver.findElement(By.xpath("//input[@id="preferedcontact2"]")).click();
+
+		driver.findElement(By.xpath("//button[@onclick="nextStep3()"]")).click();
+
+		/*Wait for Creditcard Name field in the Form page*/
+		wait = new WebDriverWait(driver, 5);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id="hname"]")));
+		
+		Select payType = new Select(driver.findElement(By.id("paymenttype")));
+		payType.selectByVisibleText("Visa Card");
+
+		driver.findElement(By.xpath("//input[@id="hname"]")).sendKeys("AutomationUser"+i);
+
+		driver.findElement(By.xpath("//input[@id="cardnumber"]")).sendKeys("9876123498761234");
+
+		driver.findElement(By.xpath("//input[@id="cvc"]")).sendKeys("777");
+
+		driver.findElement(By.xpath("//input[@id="expirydate"]")).sendKeys("07-2022");
+
+		driver.findElement(By.xpath("//input[@id="aggre"]")).click();
+
+		driver.findElement(By.xpath("//button[@onclick="nextStep4()"]")).click();
+
+		/*Wait for Puzzle field (First Num of the Equation) in the Form page*/
+		wait = new WebDriverWait(driver, 5);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id="mathfirstnum"]")));
+		
+		firstnum = driver.findElement(By.xpath("//input[@id="mathfirstnum"]")).value;
+
+		secondnum = driver.findElement(By.xpath("//input[@id="mathsecondnum"]")).value;
+
+		total = firstnum + secondnum;
+
+		driver.findElement(By.xpath("//input[@id="humanCheckCaptchaInput"]")).sendKeys(total);
+
+		driver.findElement(By.xpath("//button[@id="Submit"]")).click();		
+		
+		text1 = "Good job!"
+		Assert.IsTrue(verifyTextPresent(text1));
+		System.out.println(text1 + "is present on the Form page");
+
+		text2 = "You have finished all steps successfully!"
+		Assert.IsTrue(verifyTextPresent(text2));
+		System.out.println(text2 + "is present on the Form page");
+
+		driver.findElement(By.xpath("//button[@id="Submit"]")).click();
+
+		text3 = "You have finished all steps of this html form successfully"
+		Assert.IsTrue(verifyTextPresent(text3));
+		System.out.println(text3 + "is present on the Form page");
+		
+		driver.close();
+		driver.Quit();
+		}
+	            }
+	}	
+}
